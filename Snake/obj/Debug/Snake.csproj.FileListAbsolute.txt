@@ -38,3 +38,13 @@ C:\Users\sklon\OneDrive\Pulpit\Snake\obj\Debug\Snake.csproj.GenerateResource.cac
 C:\Users\sklon\OneDrive\Pulpit\Snake\obj\Debug\Snake.csproj.CoreCompileInputs.cache
 C:\Users\sklon\OneDrive\Pulpit\Snake\obj\Debug\Snake.exe
 C:\Users\sklon\OneDrive\Pulpit\Snake\obj\Debug\Snake.pdb
+C:\Users\sklon\OneDrive\Dokumenty\GitHub\Megawonsz9\Snake\bin\Debug\Snake.exe.config
+C:\Users\sklon\OneDrive\Dokumenty\GitHub\Megawonsz9\Snake\bin\Debug\Snake.exe
+C:\Users\sklon\OneDrive\Dokumenty\GitHub\Megawonsz9\Snake\bin\Debug\Snake.pdb
+C:\Users\sklon\OneDrive\Dokumenty\GitHub\Megawonsz9\Snake\obj\Debug\Snake.csproj.AssemblyReference.cache
+C:\Users\sklon\OneDrive\Dokumenty\GitHub\Megawonsz9\Snake\obj\Debug\Snake.Form1.resources
+C:\Users\sklon\OneDrive\Dokumenty\GitHub\Megawonsz9\Snake\obj\Debug\Snake.Properties.Resources.resources
+C:\Users\sklon\OneDrive\Dokumenty\GitHub\Megawonsz9\Snake\obj\Debug\Snake.csproj.GenerateResource.cache
+C:\Users\sklon\OneDrive\Dokumenty\GitHub\Megawonsz9\Snake\obj\Debug\Snake.csproj.CoreCompileInputs.cache
+C:\Users\sklon\OneDrive\Dokumenty\GitHub\Megawonsz9\Snake\obj\Debug\Snake.exe
+C:\Users\sklon\OneDrive\Dokumenty\GitHub\Megawonsz9\Snake\obj\Debug\Snake.pdb
