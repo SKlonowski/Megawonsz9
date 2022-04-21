@@ -283,7 +283,7 @@ namespace Snake
             SoundPlayer snd = null;
             Stream str = Properties.Resources.Wonsz_żeczny_wav;
             snd = new SoundPlayer(str);
-            snd.Play();
+            snd.PlayLooping();
         }
 
         private void gifBox_Click(object sender, EventArgs e)
@@ -303,6 +303,8 @@ namespace Snake
             {
                 gifBox.Image = img3;
                 PlayAudio();
+               
+
             }
             else
             {
@@ -353,24 +355,26 @@ namespace Snake
 
         }
         */
-
+       
         private void SaveCSV()
         {
+           
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
             saveFileDialog1.FileName = "SNEJK";
             string filter = "CSV file (*.csv)|*.csv";
             saveFileDialog1.Filter = filter;
-            const string header = "id,nr_wersji,nr_rozgrywki,ilosc_pk,ilosc_owc,kolizja,kary,podpowiedzi,timestamp,Pozostaly_czas";
+            const string header = "userid,nr_wersji,nr_rozgrywki,ilosc_pk,ilosc_owc,kolizja,kary,podpowiedzi,timestamp,Pozostaly_czas";
             StreamWriter writer = null;
             Random ran = new Random();
-            int id = ran.Next(0, 10000);
+            int userid = ran.Next(0, 10000);
             string[] colors = new string[]
             {
-                id.ToString(),
+                userid.ToString(),
                 nr_wersji.ToString(),
                 nr_rozgrywki.ToString(),
                 score.ToString(),
                 owoc.ToString(),
+                CzasGry.Text.ToString(),
 
             };
             //foreach (string s in colors)
