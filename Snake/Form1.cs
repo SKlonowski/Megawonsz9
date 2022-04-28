@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualBasic;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -53,6 +54,7 @@ namespace Snake
 
             Screenshot_Button.Enabled = false;
             saveButton.Enabled = false;
+         
         }
 
         private void KeyIsDown(object sender, KeyEventArgs e)
@@ -111,7 +113,11 @@ namespace Snake
 
             TimeCounter.Start();
             CzasGry.Text = counter.ToString();
+
+            
+            
         }
+        
 
         private void saveButton_Click(object sender, EventArgs e)
         {
@@ -355,25 +361,39 @@ namespace Snake
 
         }
         */
-       
+        public static String GetTimestamp(DateTime value)
+        {
+            return value.ToString("MM/dd/yyyy HH:mm:ss");
+        }
+        
         private void SaveCSV()
         {
-           
+            string userid = Interaction.InputBox("Proszę podać nazwę użytkownika.", "Nazwa użytkownika", "User");
+            /*user_id	wersja	timestamp	akcja	ilosc_platform	ile_zostalo	ile_poprawnych	ile_zyc_zostalo	nagroda_kara	punkt */
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-            saveFileDialog1.FileName = "SNEJK";
+            saveFileDialog1.FileName = userid +"_" + "SNEJK";
             string filter = "CSV file (*.csv)|*.csv";
             saveFileDialog1.Filter = filter;
-            const string header = "userid,nr_wersji,nr_rozgrywki,ilosc_pk,ilosc_owc,kolizja,kary,podpowiedzi,timestamp,Pozostaly_czas";
+            //kolizja,kary,podpowiedzi
+            const string header = "userid,nr_wersji,nr_rozgrywki,ilosc_pk,ilosc_owc,timestamp,Pozostaly_czas";
             StreamWriter writer = null;
-            Random ran = new Random();
-            int userid = ran.Next(0, 10000);
+
+
+           
+            //Random ran = new Random();
+            // int userid = ran.Next(0, 10000);
+
+            //if (owoc = snakeColour){
+            //  score = score + 1; }
+            String timeStamp = GetTimestamp(DateTime.Now);
             string[] colors = new string[]
             {
-                userid.ToString(),
-                nr_wersji.ToString(),
+               userid.ToString(),
+               nr_wersji.ToString(),
                 nr_rozgrywki.ToString(),
                 score.ToString(),
                 owoc.ToString(),
+                timeStamp.ToString(),
                 CzasGry.Text.ToString(),
 
             };
@@ -440,6 +460,7 @@ namespace Snake
             kolory.Add(Brushes.DarkBlue);
             kolory.Add(Brushes.Gold);
 
+            
             startButton.Enabled = false;
             saveButton.Enabled = false;
             infoButton.Enabled = false;
