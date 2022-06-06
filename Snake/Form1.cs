@@ -21,12 +21,16 @@ namespace Snake
 
         private List<Shape> Snake = new List<Shape>();
         private List<Shape> food = new List<Shape>();
+        private List<Shape> kolizje = new List<Shape>();
+
 
         private List<Brush> kolory = new List<Brush>();
         public Brush snakeColour = Brushes.DarkRed;
+        public Brush kolizja_kolor = Brushes.Black;
         public int ktory_kolor = 0;
         int nr_wersji = 2;
         int nr_rozgrywki = 0;
+        int otrzymano_kare = 0;
         //private Shape food = new Shape();
 
         int maxWidth;
@@ -35,7 +39,7 @@ namespace Snake
         int score;
         int owoc;
         int highScore;
-
+        int ile_kolizji_teraz = 0;
         Random rand = new Random();
 
         bool goLeft, goRight, goDown, goUp;
@@ -46,6 +50,7 @@ namespace Snake
         Bitmap img3 = Properties.Resources.Wonsz_rzeczny_tekst;
 
 
+
         public Form1()
         {
             InitializeComponent();
@@ -54,7 +59,7 @@ namespace Snake
 
             Screenshot_Button.Enabled = false;
             saveButton.Enabled = false;
-         
+
         }
 
         private void KeyIsDown(object sender, KeyEventArgs e)
@@ -114,10 +119,10 @@ namespace Snake
             TimeCounter.Start();
             CzasGry.Text = counter.ToString();
 
-            
-            
+
+
         }
-        
+
 
         private void saveButton_Click(object sender, EventArgs e)
         {
@@ -142,6 +147,7 @@ namespace Snake
         {
             Application.Exit();
         }
+
 
         private void gameTimer_Tick(object sender, EventArgs e)
         {
@@ -212,6 +218,13 @@ namespace Snake
                             EatFood();
                         }
                     }
+                    for (int j = 0; j < kolizje.Count; j++)
+                    {
+                        if (Snake[i].X == kolizje[j].X && Snake[i].Y == kolizje[j].Y)
+                        {
+                            GameOver();
+                        }
+                    }
                     for (int j = 1; j < Snake.Count; j++)
                     {
 
@@ -270,6 +283,17 @@ namespace Snake
                     Settings.Width, Settings.Height
                     ));
             }
+            int ile_kolizji = (int)Math.Floor((double)((owoc) / 5));
+            for (int j = 0; j < ile_kolizji; j++)
+            {
+                canvas.FillRectangle(kolizja_kolor, new Rectangle
+                    (
+                    kolizje[j].X * Settings.Width,
+                    kolizje[j].Y * Settings.Height,
+                    Settings.Width, Settings.Height
+                    ));
+            }
+
         }
 
         private void TimeCounter_Tick(object sender, EventArgs e)
@@ -309,7 +333,7 @@ namespace Snake
             {
                 gifBox.Image = img3;
                 PlayAudio();
-               
+
 
             }
             else
@@ -365,24 +389,29 @@ namespace Snake
         {
             return value.ToString("MM/dd/yyyy HH:mm:ss");
         }
-        
+
         private void SaveCSV()
         {
             string userid = Interaction.InputBox("Proszę podać nazwę użytkownika.", "Nazwa użytkownika", "User");
             /*user_id	wersja	timestamp	akcja	ilosc_platform	ile_zostalo	ile_poprawnych	ile_zyc_zostalo	nagroda_kara	punkt */
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-            saveFileDialog1.FileName = userid +"_" + "SNEJK";
+            saveFileDialog1.FileName = userid + "_" + "SNEJK";
             string filter = "CSV file (*.csv)|*.csv";
             saveFileDialog1.Filter = filter;
             //kolizja,kary,podpowiedzi
-            const string header = "userid,nr_wersji,nr_rozgrywki,ilosc_pk,ilosc_owc,timestamp,Pozostaly_czas";
+            const string header = "userid,nr_wersji,nr_rozgrywki,ilosc_pk,ilosc_owc,timestamp,otrzymano_kare,ilosc_kar,Pozostaly_czas";
             StreamWriter writer = null;
 
+            if (ile_kolizji_teraz > 0)
 
-           
+            {
+                otrzymano_kare = 1;
+            }
+
             //Random ran = new Random();
             // int userid = ran.Next(0, 10000);
-
+            ile_kolizji_teraz = ile_kolizji_teraz - 1;
+           
             //if (owoc = snakeColour){
             //  score = score + 1; }
             String timeStamp = GetTimestamp(DateTime.Now);
@@ -394,9 +423,13 @@ namespace Snake
                 score.ToString(),
                 owoc.ToString(),
                 timeStamp.ToString(),
+                otrzymano_kare.ToString(),
+                ile_kolizji_teraz.ToString(),
                 CzasGry.Text.ToString(),
 
+
             };
+
             //foreach (string s in colors)
             //{
             //    Text += s + "<br />";
@@ -432,6 +465,7 @@ namespace Snake
             dialog.Filter = "JPG File|*.jpg|JPEG File|*.jpeg|PNG File|*.png";
             dialog.ValidateNames = true;
 
+
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 int width = Convert.ToInt32(picCanvas.Width);
@@ -460,7 +494,6 @@ namespace Snake
             kolory.Add(Brushes.DarkBlue);
             kolory.Add(Brushes.Gold);
 
-            
             startButton.Enabled = false;
             saveButton.Enabled = false;
             infoButton.Enabled = false;
@@ -470,6 +503,8 @@ namespace Snake
             owoc = 0;
             nr_rozgrywki = nr_rozgrywki + 1;
             txtScore.Text = "Wynik: " + score;
+            ile_kolizji_teraz = 0;
+            otrzymano_kare = 0;
 
             Shape head = new Shape { X = 10, Y = 5 };
             Snake.Add(head); // adding the head part of the snake to the list
@@ -480,6 +515,7 @@ namespace Snake
                 Snake.Add(body);
             }
             food.Clear();
+            kolizje.Clear();
             Shape food_start = new Shape { X = rand.Next(2, maxWidth), Y = rand.Next(2, maxHeight) };
             food.Add(food_start);
 
@@ -495,7 +531,7 @@ namespace Snake
                 score += 2;
             else
                 score += 1;
-            if (owoc >= 5)
+            if (owoc >= 4)
                 ktory_kolor = r.Next(0, 4);
             else
                 ktory_kolor = 0;
@@ -520,7 +556,13 @@ namespace Snake
                 food.Add(new Shape { X = rand.Next(2, maxWidth), Y = rand.Next(2, maxHeight) });
             }
 
+            int ile_kolizji = (int)Math.Floor((double)(owoc / 5));
 
+            if (ile_kolizji > ile_kolizji_teraz)
+            {
+                kolizje.Add(new Shape { X = rand.Next(2, maxWidth), Y = rand.Next(2, maxHeight) });
+                ile_kolizji_teraz = ile_kolizji;
+            }
         }
 
         private void GameOver()
@@ -532,6 +574,8 @@ namespace Snake
             exitButton.Enabled = true;
             Screenshot_Button.Enabled = true;
             TimeCounter.Stop();
+            ktory_kolor = 0;
+
 
             if (score > highScore)
             {
