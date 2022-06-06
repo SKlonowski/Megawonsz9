@@ -28,7 +28,7 @@ namespace Snake
         public Brush snakeColour = Brushes.DarkRed;
         public Brush kolizja_kolor = Brushes.Black;
         public int ktory_kolor = 0;
-        int nr_wersji = 2;
+        int nr_wersji = 1;
         int nr_rozgrywki = 0;
         int otrzymano_kare = 0;
         //private Shape food = new Shape();
@@ -39,7 +39,7 @@ namespace Snake
         int score;
         int owoc;
         int highScore;
-        int ile_kolizji_teraz = 0;
+        int ile_kar_teraz = 0;
         Random rand = new Random();
 
         bool goLeft, goRight, goDown, goUp;
@@ -48,10 +48,10 @@ namespace Snake
         Bitmap img1 = Properties.Resources.megawonsz9;
         Bitmap img2 = Properties.Resources.Wonsz_rzeczny;
         Bitmap img3 = Properties.Resources.Wonsz_rzeczny_tekst;
+       
 
 
-
-        public Form1()
+    public Form1()
         {
             InitializeComponent();
             new Settings();
@@ -59,7 +59,7 @@ namespace Snake
 
             Screenshot_Button.Enabled = false;
             saveButton.Enabled = false;
-
+         
         }
 
         private void KeyIsDown(object sender, KeyEventArgs e)
@@ -119,10 +119,10 @@ namespace Snake
             TimeCounter.Start();
             CzasGry.Text = counter.ToString();
 
-
-
+            
+            
         }
-
+        
 
         private void saveButton_Click(object sender, EventArgs e)
         {
@@ -247,6 +247,22 @@ namespace Snake
 
             picCanvas.Invalidate();
         }
+        private void PlayAudiokara()
+        {
+            SoundPlayer snd = null;
+            Stream str = Properties.Resources.kara;
+            snd = new SoundPlayer(str);
+
+            snd.PlayLooping();
+
+            
+           
+                    System.Threading.Thread.Sleep(1000);
+                    snd.Stop();
+               
+            
+          
+        }
 
         private void UpdatePictureBoxGraphics(object sender, PaintEventArgs e)
         {
@@ -283,17 +299,8 @@ namespace Snake
                     Settings.Width, Settings.Height
                     ));
             }
-            int ile_kolizji = (int)Math.Floor((double)((owoc) / 5));
-            for (int j = 0; j < ile_kolizji; j++)
-            {
-                canvas.FillRectangle(kolizja_kolor, new Rectangle
-                    (
-                    kolizje[j].X * Settings.Width,
-                    kolizje[j].Y * Settings.Height,
-                    Settings.Width, Settings.Height
-                    ));
-            }
-
+           
+            
         }
 
         private void TimeCounter_Tick(object sender, EventArgs e)
@@ -314,7 +321,10 @@ namespace Snake
             Stream str = Properties.Resources.Wonsz_żeczny_wav;
             snd = new SoundPlayer(str);
             snd.PlayLooping();
+            
         }
+
+        
 
         private void gifBox_Click(object sender, EventArgs e)
         {
@@ -333,7 +343,7 @@ namespace Snake
             {
                 gifBox.Image = img3;
                 PlayAudio();
-
+               
 
             }
             else
@@ -389,29 +399,28 @@ namespace Snake
         {
             return value.ToString("MM/dd/yyyy HH:mm:ss");
         }
-
+        
         private void SaveCSV()
         {
             string userid = Interaction.InputBox("Proszę podać nazwę użytkownika.", "Nazwa użytkownika", "User");
             /*user_id	wersja	timestamp	akcja	ilosc_platform	ile_zostalo	ile_poprawnych	ile_zyc_zostalo	nagroda_kara	punkt */
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-            saveFileDialog1.FileName = userid + "_" + "SNEJK";
+            saveFileDialog1.FileName = userid +"_" + "SNEJK";
             string filter = "CSV file (*.csv)|*.csv";
             saveFileDialog1.Filter = filter;
             //kolizja,kary,podpowiedzi
             const string header = "userid,nr_wersji,nr_rozgrywki,ilosc_pk,ilosc_owc,timestamp,otrzymano_kare,ilosc_kar,Pozostaly_czas";
             StreamWriter writer = null;
 
-            if (ile_kolizji_teraz > 0)
+            if (ile_kar_teraz > 0)
 
             {
                 otrzymano_kare = 1;
             }
-
+            ile_kar_teraz = ile_kar_teraz - 1;
             //Random ran = new Random();
             // int userid = ran.Next(0, 10000);
-            ile_kolizji_teraz = ile_kolizji_teraz - 1;
-           
+
             //if (owoc = snakeColour){
             //  score = score + 1; }
             String timeStamp = GetTimestamp(DateTime.Now);
@@ -424,9 +433,9 @@ namespace Snake
                 owoc.ToString(),
                 timeStamp.ToString(),
                 otrzymano_kare.ToString(),
-                ile_kolizji_teraz.ToString(),
+                ile_kar_teraz.ToString(),
                 CzasGry.Text.ToString(),
-
+                
 
             };
 
@@ -464,7 +473,7 @@ namespace Snake
 
             dialog.Filter = "JPG File|*.jpg|JPEG File|*.jpeg|PNG File|*.png";
             dialog.ValidateNames = true;
-
+            
 
             if (dialog.ShowDialog() == DialogResult.OK)
             {
@@ -503,7 +512,7 @@ namespace Snake
             owoc = 0;
             nr_rozgrywki = nr_rozgrywki + 1;
             txtScore.Text = "Wynik: " + score;
-            ile_kolizji_teraz = 0;
+            ile_kar_teraz = 0;
             otrzymano_kare = 0;
 
             Shape head = new Shape { X = 10, Y = 5 };
@@ -558,10 +567,11 @@ namespace Snake
 
             int ile_kolizji = (int)Math.Floor((double)(owoc / 5));
 
-            if (ile_kolizji > ile_kolizji_teraz)
+            if (ile_kolizji > ile_kar_teraz)
             {
-                kolizje.Add(new Shape { X = rand.Next(2, maxWidth), Y = rand.Next(2, maxHeight) });
-                ile_kolizji_teraz = ile_kolizji;
+                PlayAudiokara();
+                ile_kar_teraz = ile_kolizji;
+                
             }
         }
 
@@ -576,7 +586,7 @@ namespace Snake
             TimeCounter.Stop();
             ktory_kolor = 0;
 
-
+          
             if (score > highScore)
             {
                 highScore = score;

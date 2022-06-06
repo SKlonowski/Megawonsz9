@@ -93,6 +93,7 @@
     <None Include="Resources\Image1.bmp" />
     <None Include="Resources\Wonsz_żeczny.mp3" />
     <None Include="Resources\Wonsz_żeczny_wav.wav" />
+    <None Include="Resources\kara.wav" />
     <Content Include="Wonsz_rzeczny.gif" />
     <Content Include="Wonsz_rzeczny_tekst.gif" />
   </ItemGroup>
