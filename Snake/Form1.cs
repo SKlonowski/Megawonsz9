@@ -32,12 +32,13 @@ namespace Snake
         int nr_rozgrywki = 0;
         int otrzymano_kare = 0;
         //private Shape food = new Shape();
-
+        string[] dane_do_zapisu = new string[20]{"","","","","","","","","","","","","","","","","","","",""};
         int maxWidth;
         int maxHeight;
 
         int score;
         int owoc;
+        int zly_kolor;
         int highScore;
         int ile_kolizji_teraz = 0;
         Random rand = new Random();
@@ -283,7 +284,8 @@ namespace Snake
                     Settings.Width, Settings.Height
                     ));
             }
-            int ile_kolizji = (int)Math.Floor((double)((owoc) / 5));
+            int ile_kolizji = (int)Math.Floor((double)((zly_kolor) / 5));
+            //int ile_kolizji = zly_kolor;
             for (int j = 0; j < ile_kolizji; j++)
             {
                 canvas.FillRectangle(kolizja_kolor, new Rectangle
@@ -395,46 +397,38 @@ namespace Snake
             string userid = Interaction.InputBox("Proszę podać nazwę użytkownika.", "Nazwa użytkownika", "User");
             /*user_id	wersja	timestamp	akcja	ilosc_platform	ile_zostalo	ile_poprawnych	ile_zyc_zostalo	nagroda_kara	punkt */
             SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-            saveFileDialog1.FileName = userid + "_" + "SNEJK";
+            
+            
             string filter = "CSV file (*.csv)|*.csv";
             saveFileDialog1.Filter = filter;
             //kolizja,kary,podpowiedzi
             const string header = "userid,nr_wersji,nr_rozgrywki,ilosc_pk,ilosc_owc,timestamp,otrzymano_kare,ilosc_kar,Pozostaly_czas";
             StreamWriter writer = null;
-
-            if (ile_kolizji_teraz > 0)
-
+            /*
+            dane_do_zapisu.Append(nr_rozgrywki.ToString());
+            dane_do_zapisu.Append(score.ToString());
+            dane_do_zapisu.Append(owoc.ToString());
+            dane_do_zapisu.Append(timeStamp.ToString());
+            dane_do_zapisu.Append(otrzymano_kare.ToString());
+            dane_do_zapisu.Append(ile_kolizji_teraz.ToString());
+            dane_do_zapisu.Append(CzasGry.Text.ToString() + "\n");
+            tutaj_bylem
+            */
+            string commaseparatedstring = "";
+            for (int x = 1; x <= nr_rozgrywki; x++)
             {
-                otrzymano_kare = 1;
+                string[] temp_x = new string[3] { userid.ToString(), nr_wersji.ToString(), dane_do_zapisu[x - 1] };
+                string commaseparatedstring2 = String.Join(",", temp_x);
+                if(String.Equals(commaseparatedstring,""))
+                {
+                    commaseparatedstring = commaseparatedstring2;
+                }
+                else
+                {
+                    commaseparatedstring = commaseparatedstring + "\n" + commaseparatedstring2;
+                }
             }
-
-            //Random ran = new Random();
-            // int userid = ran.Next(0, 10000);
-            ile_kolizji_teraz = ile_kolizji_teraz - 1;
-           
-            //if (owoc = snakeColour){
-            //  score = score + 1; }
-            String timeStamp = GetTimestamp(DateTime.Now);
-            string[] colors = new string[]
-            {
-               userid.ToString(),
-               nr_wersji.ToString(),
-                nr_rozgrywki.ToString(),
-                score.ToString(),
-                owoc.ToString(),
-                timeStamp.ToString(),
-                otrzymano_kare.ToString(),
-                ile_kolizji_teraz.ToString(),
-                CzasGry.Text.ToString(),
-
-
-            };
-
-            //foreach (string s in colors)
-            //{
-            //    Text += s + "<br />";
-            //}
-            string commaseparatedstring = String.Join(",", colors);
+            
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 filter = saveFileDialog1.FileName;
@@ -501,6 +495,7 @@ namespace Snake
             Screenshot_Button.Enabled = false;
             score = 0;
             owoc = 0;
+            zly_kolor = 0;
             nr_rozgrywki = nr_rozgrywki + 1;
             txtScore.Text = "Wynik: " + score;
             ile_kolizji_teraz = 0;
@@ -530,7 +525,10 @@ namespace Snake
             if (snakeColour == kolory[ktory_kolor])
                 score += 2;
             else
+            {
                 score += 1;
+                zly_kolor += 1;
+            }
             if (owoc >= 4)
                 ktory_kolor = r.Next(0, 4);
             else
@@ -550,13 +548,12 @@ namespace Snake
             snakeColour = kolory[ktory_kolor];
             colorBox.Invalidate();
 
-
+            
             for (int j = 0; j < 4; j++)
             {
                 food.Add(new Shape { X = rand.Next(2, maxWidth), Y = rand.Next(2, maxHeight) });
             }
-
-            int ile_kolizji = (int)Math.Floor((double)(owoc / 5));
+            int ile_kolizji = (int)Math.Floor((double)(zly_kolor / 5));
 
             if (ile_kolizji > ile_kolizji_teraz)
             {
@@ -585,7 +582,32 @@ namespace Snake
                 txtHighScore.ForeColor = Color.Maroon;
                 txtHighScore.TextAlign = ContentAlignment.MiddleCenter;
             }
-            SaveCSV();
+            if (ile_kolizji_teraz > 0)
+
+            {
+                otrzymano_kare = 1;
+            }
+
+            string[] temp_string;
+            if(nr_rozgrywki>20)
+            {
+                nr_rozgrywki = 20;
+            }
+            ile_kolizji_teraz = ile_kolizji_teraz - 1;
+            String timeStamp = GetTimestamp(DateTime.Now);
+            temp_string = new string[] {
+                nr_rozgrywki.ToString(),
+                score.ToString(),
+                owoc.ToString(),
+                timeStamp.ToString(),
+                otrzymano_kare.ToString(),
+                ile_kolizji_teraz.ToString(),
+                CzasGry.Text.ToString()
+            };
+            string temp_string_2 = String.Join(",", temp_string);
+            dane_do_zapisu[nr_rozgrywki-1] = temp_string_2;
+
+            //SaveCSV();
         }
 
     }
