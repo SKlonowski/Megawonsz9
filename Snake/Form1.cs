@@ -111,6 +111,11 @@ namespace Snake
 
         private void startButton_Click(object sender, EventArgs e)
         {
+
+
+            System.Windows.Forms.MessageBox.Show("Wersja v1 SNEJK \nUprzejmie informuję,że granie w niniejszą wersję SNEJKA może skutkować USZCZERBKIEM NA ZDROWIU(ZAWAŁEM)\nGRACIE NA WŁASNĄ ODPOWIEDZIALNOŚĆ", "OSTRZEŻENIE",
+                  System.Windows.Forms.MessageBoxButtons.OK,
+                  System.Windows.Forms.MessageBoxIcon.Warning);
             RestartGame();
             counter = 500;
             TimeCounter = new System.Windows.Forms.Timer();
