@@ -80,3 +80,14 @@ D:\Pobrane\Megawonsz9-main-dzwiek\Megawonsz9-main\Snake\obj\Debug\Snake.csproj.G
 D:\Pobrane\Megawonsz9-main-dzwiek\Megawonsz9-main\Snake\obj\Debug\Snake.csproj.CoreCompileInputs.cache
 D:\Pobrane\Megawonsz9-main-dzwiek\Megawonsz9-main\Snake\obj\Debug\Snake.exe
 D:\Pobrane\Megawonsz9-main-dzwiek\Megawonsz9-main\Snake\obj\Debug\Snake.pdb
+D:\Aplikacje_Visual\Megawonsz9\Snake\obj\Debug\Snake.csproj.AssemblyReference.cache
+D:\Aplikacje_Visual\Megawonsz9\Snake\obj\Debug\Snake.csproj.SuggestedBindingRedirects.cache
+D:\Aplikacje_Visual\Megawonsz9\Snake\obj\Debug\Snake.Form1.resources
+D:\Aplikacje_Visual\Megawonsz9\Snake\obj\Debug\Snake.Properties.Resources.resources
+D:\Aplikacje_Visual\Megawonsz9\Snake\obj\Debug\Snake.csproj.GenerateResource.cache
+D:\Aplikacje_Visual\Megawonsz9\Snake\obj\Debug\Snake.csproj.CoreCompileInputs.cache
+D:\Aplikacje_Visual\Megawonsz9\Snake\obj\Debug\Snake.exe
+D:\Aplikacje_Visual\Megawonsz9\Snake\obj\Debug\Snake.pdb
+D:\Aplikacje_Visual\Megawonsz9\Snake\bin\Debug\Snake.exe.config
+D:\Aplikacje_Visual\Megawonsz9\Snake\bin\Debug\Snake.exe
+D:\Aplikacje_Visual\Megawonsz9\Snake\bin\Debug\Snake.pdb

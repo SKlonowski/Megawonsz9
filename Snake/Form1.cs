@@ -27,15 +27,16 @@ namespace Snake
         private List<Brush> kolory = new List<Brush>();
         public Brush snakeColour = Brushes.DarkRed;
         public Brush kolizja_kolor = Brushes.Black;
+
         public int ktory_kolor = 0;
         int nr_wersji = 1;
         int nr_rozgrywki = 0;
         int otrzymano_kare = 0;
         //private Shape food = new Shape();
-
+        string[] dane_do_zapisu = new string[20] { "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "" };
         int maxWidth;
         int maxHeight;
-
+        int zly_kolor;
         int score;
         int owoc;
         int highScore;
@@ -289,7 +290,7 @@ namespace Snake
                     Settings.Width, Settings.Height
                     ));
             }
-
+            int ile_kolizji = (int)Math.Floor((double)((zly_kolor) / 5));
             for (int j = 0; j < food.Count; j++)
             {
                 canvas.FillEllipse(kolory[j], new Rectangle
@@ -411,7 +412,17 @@ namespace Snake
             //kolizja,kary,podpowiedzi
             const string header = "userid,nr_wersji,nr_rozgrywki,ilosc_pk,ilosc_owc,timestamp,otrzymano_kare,ilosc_kar,Pozostaly_czas";
             StreamWriter writer = null;
-
+            
+            /*
+            dane_do_zapisu.Append(nr_rozgrywki.ToString());
+            dane_do_zapisu.Append(score.ToString());
+            dane_do_zapisu.Append(owoc.ToString());
+            dane_do_zapisu.Append(timeStamp.ToString());
+            dane_do_zapisu.Append(otrzymano_kare.ToString());
+            dane_do_zapisu.Append(ile_kar_teraz.ToString());
+            dane_do_zapisu.Append(CzasGry.Text.ToString() + "\n");
+            tutaj_bylem
+            */
             if (ile_kar_teraz > 0)
 
             {
@@ -423,27 +434,43 @@ namespace Snake
 
             //if (owoc = snakeColour){
             //  score = score + 1; }
-            String timeStamp = GetTimestamp(DateTime.Now);
-            string[] colors = new string[]
-            {
-               userid.ToString(),
-               nr_wersji.ToString(),
-                nr_rozgrywki.ToString(),
-                score.ToString(),
-                owoc.ToString(),
-                timeStamp.ToString(),
-                otrzymano_kare.ToString(),
-                ile_kar_teraz.ToString(),
-                CzasGry.Text.ToString(),
+            //String timeStamp = GetTimestamp(DateTime.Now);
+            //string[] colors = new string[]
+            //{
+            //   userid.ToString(),
+            //   nr_wersji.ToString(),
+            //    nr_rozgrywki.ToString(),
+            //    score.ToString(),
+            //    owoc.ToString(),
+            //    timeStamp.ToString(),
+            //    otrzymano_kare.ToString(),
+            //    ile_kar_teraz.ToString(),
+            //    CzasGry.Text.ToString(),
                 
 
-            };
+            //};
 
             //foreach (string s in colors)
             //{
             //    Text += s + "<br />";
             //}
-            string commaseparatedstring = String.Join(",", colors);
+        
+
+            string commaseparatedstring = "";
+            for (int x = 1; x <= nr_rozgrywki; x++)
+            {
+                string[] temp_x = new string[3] { userid.ToString(), nr_wersji.ToString(), dane_do_zapisu[x - 1] };
+                string commaseparatedstring2 = String.Join(",", temp_x);
+                if (String.Equals(commaseparatedstring, ""))
+                {
+                    commaseparatedstring = commaseparatedstring2;
+                }
+                else
+                {
+                    commaseparatedstring = commaseparatedstring + "\n" + commaseparatedstring2;
+                }
+            }
+
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 filter = saveFileDialog1.FileName;
@@ -452,6 +479,7 @@ namespace Snake
                 writer.WriteLine(commaseparatedstring);
                 writer.Close();
             }
+            //return File(myExport.ExportToBytes(), "text/csv", "results.csv");
             //return File(myExport.ExportToBytes(), "text/csv", "results.csv");
         }
 
@@ -510,6 +538,7 @@ namespace Snake
             Screenshot_Button.Enabled = false;
             score = 0;
             owoc = 0;
+            zly_kolor = 0;
             nr_rozgrywki = nr_rozgrywki + 1;
             txtScore.Text = "Wynik: " + score;
             ile_kar_teraz = 0;
@@ -539,7 +568,10 @@ namespace Snake
             if (snakeColour == kolory[ktory_kolor])
                 score += 2;
             else
+            {
                 score += 1;
+                zly_kolor += 1;
+            }
             if (owoc >= 4)
                 ktory_kolor = r.Next(0, 4);
             else
@@ -565,7 +597,7 @@ namespace Snake
                 food.Add(new Shape { X = rand.Next(2, maxWidth), Y = rand.Next(2, maxHeight) });
             }
 
-            int ile_kolizji = (int)Math.Floor((double)(owoc / 5));
+            int ile_kolizji = (int)Math.Floor((double)(zly_kolor / 5));
 
             if (ile_kolizji > ile_kar_teraz)
             {
@@ -595,7 +627,32 @@ namespace Snake
                 txtHighScore.ForeColor = Color.Maroon;
                 txtHighScore.TextAlign = ContentAlignment.MiddleCenter;
             }
-            SaveCSV();
+
+            if (ile_kar_teraz > 0)
+
+            {
+                otrzymano_kare = 1;
+            }
+
+            string[] temp_string;
+            if (nr_rozgrywki > 20)
+            {
+                nr_rozgrywki = 20;
+            }
+            ile_kar_teraz = ile_kar_teraz - 1;
+            String timeStamp = GetTimestamp(DateTime.Now);
+            temp_string = new string[] {
+                nr_rozgrywki.ToString(),
+                score.ToString(),
+                owoc.ToString(),
+                timeStamp.ToString(),
+                otrzymano_kare.ToString(),
+                ile_kar_teraz.ToString(),
+                CzasGry.Text.ToString()
+            };
+            string temp_string_2 = String.Join(",", temp_string);
+            dane_do_zapisu[nr_rozgrywki - 1] = temp_string_2;
+            //SaveCSV();
         }
 
     }
